@@ -2,8 +2,6 @@
 
 Async, multi-tenant hybrid RAG API with automated evaluation.
 
-## Status
-Day 1 of 60. Under active development.
 
 ## Stack
 FastAPI · Celery · Redis · PostgreSQL + pgvector · Ragas
