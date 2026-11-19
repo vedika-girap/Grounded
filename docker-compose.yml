@@ -1,0 +1,34 @@
+services:
+    postgres:
+        image: pgvector/pgvector:pg16
+        container_name: grounded-postgres
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER:-grounded}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-grounded}
+            POSTGRES_DB: ${POSTGRES_DB:-grounded}
+        ports:
+            - "5432:5432"
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+          - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-grounded}"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+    redis:
+        image: redis:7-alpine
+        container_name: grounded-redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+volumes:
+  postgres_data:       
+  redis_data:
